@@ -10,21 +10,21 @@
 ######    EXAMPLE MODULE      #####
 ###################################
 
-  #
-  # module Perimeter
+
+  # module Perimeter                    #add this line/end to make all the namespace unique since the name of class Array could be common with others
   #   class Array
   #     def initialize
   #       @size = 400
   #     end
   #   end
   # end
+  # #
+  # our_array = Perimeter::Array.new    #this is the custome class Array above
+  # ruby_array = Array.new              #this is the default Ruby array
   #
-  # our_array = Perimeter::Array.new
-  # ruby_array = Array.new
-  #
-  # p our_array.class
+  # p our_array.class                   #p is short for "print"
   # p ruby_array.class
-  #
+  # #
   # p our_array.length
 
 
@@ -36,10 +36,10 @@
 ###################################
 #DOCUMENTATION
 #https://github.com/stympy/faker#fakerhacker
-
+#
 # require "faker"
 #
-# puts Faker::Hacker.say_something_smart
+# puts Faker::Hacker.say_something_smart      #"Faker" is a module, "Hacker" is a class name
 # puts Faker::Hacker.adjective
 # puts Faker::Hacker.verb
 
@@ -56,14 +56,14 @@
 
 #Testing out the traveller gem!
 
-  # require 'traveller'
-  #
-  # trav = Traveller.new("Seattle, Minnesota 98101")
+  require 'traveller'
+
+  traveller1 = Traveller.new("Seattle, Minnesota 98101")
 
   # puts traveller1.city
   # puts traveller1.zip
-  #
-  # trav.state = "Washington"
+  # #
+  # traveller1.state = "Washington"
   #
   # puts traveller1.state
 
@@ -73,19 +73,24 @@
 ###################################
 
 #I want to create a new class for travellers, called traveller. What could possibly go wrong?
-  # class Traveller
-  #   attr_accessor :name, :email, :city, :state
-  #   def initialize(details_hash)
-  #     @name = details_hash[:name]
-  #     @email = details_hash[:email]
-  #     @location = Traveller.new(details_hash[:location])
-  #   end
-  # end
+module Expedia
+  class Traveller
+    attr_accessor :name, :email, :location
+    def initialize(details_hash)
+      @name = details_hash[:name]
+      @email = details_hash[:email]
+      @location = details_hash[:location]
+    end
+  end
+end
 
   #Tests to use the Traveller Gem (after my class has been created. )
-    # traveller2 = Traveller.new("Chicago 60611 IL")
-    # puts Traveller.state
+    traveller2 = Traveller.new("Chicago 60611 IL")    #This is the gem Traveller object
+    puts traveller2.state
 
+  #This is the custome Traveller class, NOT the gem Traveller
+    location = Traveller.new("Seattle")
+    user1 = Expedia::Traveller.new({name: "Ada", email: "@email.com", location: location})
   #Hmm. It doesn't work. Oh bother.
   #How would we possibly fix this so I don't have to change the name of MY class but still be able to use this gem?
 
@@ -110,38 +115,42 @@
 
 
 
-      #   module Blackjack
-      #     MAX_SCORE = 21
-      #     module Player
-      #         MAX_PLAYERS = 2
-      #         class Player
-      #           def initialize
-      #           end
-      #         end
-      #     end
-      #     module Card
-      #         MAX_VALUE = 13
-      #         class Card
-      #           def get_max_value()
-      #               return MAX_VALUE
-      #           end
-      #         end
-      #     end
-      # end
-      #
-      # MAX_SCORE = 50
-      # MAX_PLAYERS = 4
-      # MAX_VALUE = 21
-      #
-      # puts "MAX_SCORE - #{MAX_SCORE}"
-      # puts "Blackjack::MAX_SCORE - #{Blackjack::MAX_SCORE}"
-      #
-      # puts
-      #
-      # puts "MAX_Players - #{MAX_PLAYERS}"
-      # puts "Blackjack::Player::MAX_Players - #{Blackjack::Player::MAX_PLAYERS}"
-      #
-      # puts
-      #
-      # puts "MAX_VALUE - #{MAX_VALUE}"
-      # puts "Blackjack::Card::get_max_value -  #{Blackjack::Card::Card.new().get_max_value()}"`
+        module Blackjack
+          MAX_SCORE = 21
+
+          module Player
+              MAX_PLAYERS = 2
+              class Player
+                def initialize
+                end
+              end
+          end
+
+          module Card
+              MAX_VALUE = 13
+              class Card
+                def get_max_value()
+                    return MAX_VALUE
+                end
+              end
+          end
+
+      end
+
+      MAX_SCORE = 50
+      MAX_PLAYERS = 4
+      MAX_VALUE = 21
+
+      puts "MAX_SCORE - #{MAX_SCORE}"  #This MAX_SCORE is 50, NOT inside the module Blackjack.
+      puts "Blackjack::MAX_SCORE - #{Blackjack::MAX_SCORE}"     #This MAX_SCORE is 21, which is inside module Blackjack.
+
+
+      puts
+
+      puts "MAX_Players - #{MAX_PLAYERS}"
+      puts "Blackjack::Player::MAX_Players - #{Blackjack::Player::MAX_PLAYERS}" #This MAX_PLAYERS is inside  Blackjack module, which is inside Player module.
+
+      puts
+
+      puts "MAX_VALUE - #{MAX_VALUE}"
+      puts "Blackjack::Card::get_max_value -  #{Blackjack::Card::Card.new().get_max_value()}"   #Blackjack is a module. The first "Card" is a module inside Blackjack module. The second "Card" is the class Card inside Card module.
